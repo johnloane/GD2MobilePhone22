@@ -21,38 +21,38 @@ public class App
     public static void main( String[] args )
     {
         System.out.println("Welcome to the amazing mobile phone app");
+        MenuOptions selectedOption = MenuOptions.PRINT_MENU;
 
         boolean quit = false;
         startPhone();
         printOptions();
 
-        while(!quit)
+        while(selectedOption != MenuOptions.QUIT)
         {
             System.out.print("\n Enter action: (0 to show available options) > ");
-            int action = keyboard.nextInt();
-            keyboard.nextLine();
+            selectedOption = MenuOptions.values()[Integer.parseInt(keyboard.nextLine().trim())];
             //TODO refactor to use enum instead of 0, 1, 2, etc
-            switch(action)
+            switch(selectedOption)
             {
-                case 0:
+                case PRINT_MENU:
                     printOptions();
                     break;
-                case 1:
+                case PRINT_CONTACTS:
                     myPhone.printContacts();
                     break;
-                case 2:
+                case ADD_CONTACT:
                     addNewContact();
                     break;
-                case 3:
+                case UPDATE_CONTACT:
                     updateContact();
                     break;
-                case 4:
+                case REMOVE_CONTACT:
                     removeContact();
                     break;
-                case 5:
+                case SEARCH_CONTACT:
                     searchContact();
                     break;
-                case 6:
+                case QUIT:
                     System.out.println("Shutting down the system....");
                     quit = true;
                     break;
@@ -94,23 +94,18 @@ public class App
         }
     }
 
-    //Try to write this method
-    //TODO take the repeated code asking for name and phoneNumber
-    //and add to separate method to avoid repetition
+
     private static void updateContact()
     {
-        System.out.print("Enter existing contact name > ");
-        String name = keyboard.nextLine();
+        String name = getUserInput("Enter existing contact name > ");
         Contact existingContactRecord = myPhone.searchContact(name);
         if(existingContactRecord == null)
         {
             System.out.println("Contact not found");
             return;
         }
-        System.out.print("Enter new contact name > ");
-        String newName = keyboard.nextLine();
-        System.out.print("Enter new contact phone number > ");
-        String newPhoneNumber = keyboard.nextLine();
+        String newName = getUserInput("Enter new contact name > ");
+        String newPhoneNumber = getUserInput("Enter new contact phone number > ");
         Contact newContact = Contact.createContact(newName, newPhoneNumber);
         if(myPhone.updateContact(existingContactRecord, newContact))
         {
@@ -120,6 +115,12 @@ public class App
         {
             System.out.println("Could not update record");
         }
+    }
+
+    private static String getUserInput(String message)
+    {
+        System.out.print(message);
+        return keyboard.nextLine();
     }
 
     private static void removeContact()
@@ -135,7 +136,7 @@ public class App
         myPhone.removeContact(existingContactRecord);
 
     }
-    
+
     private static void searchContact()
     {
         System.out.print("Enter the name of the contact to search > ");
