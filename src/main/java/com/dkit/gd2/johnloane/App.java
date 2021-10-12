@@ -121,13 +121,31 @@ public class App
             System.out.println("Could not update record");
         }
     }
-    //TODO implement this method
+
     private static void removeContact()
     {
+        System.out.print("Enter the name of the contact to remove > ");
+        String name = keyboard.nextLine();
+        Contact existingContactRecord = myPhone.searchContact(name);
+        if(existingContactRecord == null)
+        {
+            System.out.println("Contact not found");
+            return;
+        }
+        myPhone.removeContact(existingContactRecord);
 
     }
-    //TODO implement
+    
     private static void searchContact()
     {
+        System.out.print("Enter the name of the contact to search > ");
+        String name = keyboard.nextLine();
+        Contact existingContactRecord = myPhone.searchContact(name);
+        if(existingContactRecord == null)
+        {
+            System.out.println("Contact not found");
+            return;
+        }
+        System.out.println("Name: " + existingContactRecord.getName() + " phone number is " + existingContactRecord.getPhoneNumber());
     }
 }
